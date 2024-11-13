@@ -1,0 +1,26 @@
+
+import google.generativeai as genai
+
+genai.configure(api_key="AIzaSyCoYzJU2VHpaOgBq0CoElAuy_MyRJIhVhw")
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+system_prompt = ("Act like a fun and motivating nutrition guide.Provide nutritional facts about the food the user specifies and provide a meal plan based on their diet.If the user asks for meal plan ask the users age , gender and their diet,if they are  a vegan or  a vegetarian or a non vegetarian.")
+
+chat_history = system_prompt
+
+def chat_with_bot(user_input):
+    global chat_history
+    chat_history += user_input
+    response = model.generate_content(chat_history)
+    chat_history += response.text
+    return response.text
+
+if __name__ == "__main__":
+    print("Welcome to NutriGuide. How can I help you today? Do u want nutritional facts about a certain food, meal plan or healthy meals to satisfy your junk cravings?")
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == "bye":
+            print("Byee.Happy to help!! ")
+            break
+        response = chat_with_bot(user_input)
+        print(f"Bot: {response}")
